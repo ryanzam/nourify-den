@@ -1,9 +1,11 @@
-import Image from 'next/image'
+import Carousel from './components/Carousel'
+import MostPopular from "./components/MostPopular"
 
 export default function Home() {
   return (
-    <div>
-      Home
-    </div>
+    <main>
+      <Carousel />
+      <MostPopular />
+    </main>
   )
 }
