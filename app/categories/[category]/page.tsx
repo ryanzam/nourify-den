@@ -21,7 +21,7 @@ const CategoryPage = async ({ params }: { params: IParams }) => {
         <div className="lg:flex mt-4 gap-5">
             {foods.map((f: FoodType) => (
                 <Link className="max-w-xs overflow-hidden bg-white rounded-lg shadow-lg dark:bg-gray-800" 
-                    href={`/food/${f.id}`} key={f.id}>
+                    href={`/foods/${f.id}`} key={f.id}>
                     <div className="px-4 py-2">
                         <h1 className="text-xl font-bold text-gray-800 uppercase dark:text-white">{f.title}</h1>
                         <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">{f.description}</p>

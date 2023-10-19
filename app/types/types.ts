@@ -6,7 +6,12 @@ export type FoodType = {
     image: string,
     isFeatured: boolean,
     createdAt?: Date,
-    options: []
+    options: OptionsType[]
+}
+
+export type OptionsType = {
+    title: string,
+    extraPrice: number
 }
 
 export type CategoryType = {
