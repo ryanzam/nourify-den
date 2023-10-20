@@ -3,6 +3,8 @@ import { Nunito } from 'next/font/google'
 import './globals.css'
 import Nav from './components/Nav'
 import Footer from './components/Footer'
+import AuthProvider from './providers/AuthProvider'
+import { Toaster } from 'react-hot-toast'
 
 const nunito = Nunito({ subsets: ['latin'] })
 
@@ -19,13 +21,16 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={nunito.className}>
-        <div className="flex flex-col h-screen">
-          <Nav />
-          <div className="container mx-auto flex-grow">
-            {children}
+        <Toaster />
+        <AuthProvider>
+          <div className="flex flex-col h-screen">
+            <Nav />
+            <div className="container mx-auto flex-grow">
+              {children}
+            </div>
+            <Footer />
           </div>
-          <Footer />
-        </div>
+        </AuthProvider>
       </body>
     </html>
   )

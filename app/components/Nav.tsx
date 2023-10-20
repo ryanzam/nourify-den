@@ -1,8 +1,13 @@
+"use client"
+
 import { MdFastfood } from "react-icons/md"
 import { AiOutlineShoppingCart } from "react-icons/ai"
+import { signOut, useSession } from "next-auth/react"
 
 const Nav = () => {
-    const user = false
+
+    const { status } = useSession()
+
     return (
         <header className="bg-neutral-100">
             <div className="mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8">
@@ -45,10 +50,10 @@ const Nav = () => {
                         </nav>
 
                         <div className="flex items-center gap-4">
-                            {!user ?
+                            {status === "unauthenticated" ?
                                 <div className="sm:flex sm:gap-4">
                                     <a className="primary-btn"
-                                        href="/"
+                                        href="/signin"
                                     >
                                         Login
                                     </a>
@@ -69,6 +74,7 @@ const Nav = () => {
                                     </a>
                                     <a className="secondary-btn"
                                         href="/"
+                                        onClick={() => signOut({callbackUrl: "/"})}
                                     >
                                         Sign out
                                     </a>
