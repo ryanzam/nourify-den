@@ -21,3 +21,29 @@ export type CategoryType = {
     image?: string,
     category: string
 }
+
+export type OrderType = {
+    id: string;
+    foods: FoodInCartType[];
+    status: OrderStatus;
+    price: number;
+    createdAt: Date;
+    intent_id?: String;
+    userEmail: string;
+};
+
+export type FoodInCartType = {
+    id: string,
+    title: string,
+    price: number,
+    image?: string,
+    optsTitle?: string,
+    quantity: number
+}
+
+
+export enum OrderStatus {
+    ORDER_RECEIVED = "Order received",
+    OUT_FOR_DELIVERY = "Out of delivery",
+    DELIVERED = "Delivered"
+}

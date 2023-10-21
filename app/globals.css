@@ -16,3 +16,17 @@
   @apply rounded-md bg-gray-100 px-5 py-2.5 text-sm font-medium text-amber-900 hover:bg-gray-300
 }
 
+.loader {
+  animation: loaderanim .7s infinite alternate-reverse;
+}
+
+@keyframes loaderanim {
+  from { 
+    border: 5px solid gray;
+    transform: rotateY(0);
+  }
+  to {
+    border: 5px solid rgb(94, 48, 11);
+    transform: rotateY(180deg);
+  }
+}

@@ -1,9 +1,14 @@
-import { mostPopularFoods } from "../dummydata"
 import Image from "next/image"
 
-const MostPopular = () => {
+const fetchFood = async () => {
+    const response = await fetch(`${process.env.BASE_URI}/api/foods/`)
+    const foods =  await response.json()
+    return foods.slice(0, 3)
+}
 
-    const popularFoods = mostPopularFoods.slice(0, 3)
+const MostPopular = async () => {
+
+    const popularFoods = await fetchFood()
 
     return (
         <div className="bg-white dark:bg-gray-900">

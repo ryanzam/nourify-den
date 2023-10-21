@@ -14,7 +14,7 @@ const Nav = () => {
                 <div className="flex h-16 items-center justify-between">
                     <div className="flex-1 md:flex md:items-center md:gap-12">
                         <a className="text-amber-900 flex items-center gap-1" href="/">
-                            <MdFastfood size={30}/>
+                            <MdFastfood size={30} />
                             <div className="block">
                                 Nourify<span className="text-gray-500">Rouka</span>
                             </div>
@@ -43,7 +43,7 @@ const Nav = () => {
                                     <a className="text-gray-500 transition hover:text-gray-500/75"
                                         href="/"
                                     >
-                                        <span className="flex"><AiOutlineShoppingCart size={20}/> (0)</span>
+                                        <span className="flex"><AiOutlineShoppingCart size={20} /> (0)</span>
                                     </a>
                                 </li>
                             </ul>
@@ -60,7 +60,7 @@ const Nav = () => {
 
                                     <div className="hidden sm:flex">
                                         <a className="secondary-btn"
-                                            href="/"
+                                            href="/signup"
                                         >
                                             Register
                                         </a>
@@ -68,13 +68,12 @@ const Nav = () => {
                                 </div> :
                                 <div className="sm:flex sm:gap-4">
                                     <a className="primary-btn"
-                                        href="/"
+                                        href="/orders"
                                     >
                                         Orders
                                     </a>
                                     <a className="secondary-btn"
-                                        href="/"
-                                        onClick={() => signOut({callbackUrl: "/"})}
+                                        onClick={() => signOut({ callbackUrl: "/" })}
                                     >
                                         Sign out
                                     </a>

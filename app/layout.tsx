@@ -5,6 +5,7 @@ import Nav from './components/Nav'
 import Footer from './components/Footer'
 import AuthProvider from './providers/AuthProvider'
 import { Toaster } from 'react-hot-toast'
+import QueryProvider from './providers/QueryProvider'
 
 const nunito = Nunito({ subsets: ['latin'] })
 
@@ -23,13 +24,15 @@ export default function RootLayout({
       <body className={nunito.className}>
         <Toaster />
         <AuthProvider>
-          <div className="flex flex-col h-screen">
-            <Nav />
-            <div className="container mx-auto flex-grow">
-              {children}
+          <QueryProvider>
+            <div className="flex flex-col h-screen">
+              <Nav />
+              <div className="container mx-auto flex-grow">
+                {children}
+              </div>
+              <Footer />
             </div>
-            <Footer />
-          </div>
+          </QueryProvider>
         </AuthProvider>
       </body>
     </html>
