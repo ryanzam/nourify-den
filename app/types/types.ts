@@ -30,7 +30,7 @@ export type OrderType = {
     createdAt: Date;
     intent_id?: String;
     userEmail: string;
-};
+}
 
 export type FoodInCartType = {
     id: string,
@@ -40,7 +40,6 @@ export type FoodInCartType = {
     optsTitle?: string,
     quantity: number
 }
-
 
 export enum OrderStatus {
     ORDER_RECEIVED = "Order received",

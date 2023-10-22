@@ -3,10 +3,12 @@
 import { MdFastfood } from "react-icons/md"
 import { AiOutlineShoppingCart } from "react-icons/ai"
 import { signOut, useSession } from "next-auth/react"
+import { useCartStore } from "@/store/cartstore"
 
 const Nav = () => {
 
     const { status } = useSession()
+    const { foods, totalPrice } = useCartStore()
 
     return (
         <header className="bg-neutral-100">
@@ -41,9 +43,11 @@ const Nav = () => {
                                 </li>
                                 <li>
                                     <a className="text-gray-500 transition hover:text-gray-500/75"
-                                        href="/"
+                                        href="/cart"
                                     >
-                                        <span className="flex"><AiOutlineShoppingCart size={20} /> (0)</span>
+                                        <span className="flex">
+                                            <AiOutlineShoppingCart size={20} /> ({foods.length})
+                                        </span>
                                     </a>
                                 </li>
                             </ul>

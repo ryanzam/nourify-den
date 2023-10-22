@@ -1,14 +1,24 @@
-import Image from "next/image"
+"use client"
 
-const fetchFood = async () => {
-    const response = await fetch(`${process.env.BASE_URI}/api/foods/`)
-    const foods =  await response.json()
-    return foods.slice(0, 3)
+import { useCartStore } from "@/store/cartstore"
+import Image from "next/image"
+import { FoodInCartType, FoodType } from "../types/types"
+import { FC } from "react"
+import toast from "react-hot-toast"
+
+interface IMostPopularProps {
+    popularFoods: FoodType[]
 }
 
-const MostPopular = async () => {
+const MostPopular: FC<IMostPopularProps> = ({ popularFoods }) => {
 
-    const popularFoods = await fetchFood()
+    const { addFoodToCart } = useCartStore()
+
+
+    const handleAddToCart = (food: FoodInCartType) => {
+        addFoodToCart({ id: food.id, title: food.title, image: food.image, quantity: 1, price: food.price })
+        toast.success(`${food.title} added`)
+    }
 
     return (
         <div className="bg-white dark:bg-gray-900">
@@ -22,7 +32,7 @@ const MostPopular = async () => {
                 <div className="grid grid-cols-1 gap-8 mt-6 xl:mt-12 xl:gap-12 md:grid-cols-2 lg:grid-cols-3">
 
                     {popularFoods.map((food: any) => (
-                        <div className="w-full p-8 space-y-8 text-center border border-gray-200 rounded-lg dark:border-gray-700">
+                        <div key={food.id} className="w-full p-8 space-y-8 text-center border border-gray-200 rounded-lg dark:border-gray-700">
                             <p className="font-medium text-gray-500 uppercase dark:text-gray-300">{food.title}</p>
 
                             <div className="w-full">
@@ -37,7 +47,7 @@ const MostPopular = async () => {
 
                             <p className="font-medium text-gray-500 dark:text-gray-300">{food.description}</p>
 
-                            <button className="w-full primary-btn">
+                            <button className="w-full primary-btn" onClick={() => handleAddToCart(food)}>
                                 Add to Cart
                             </button>
                         </div>
