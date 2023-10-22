@@ -71,7 +71,7 @@ model Order {
   foods     Json[]
   status    String
   price     Int
-  intent_id String?  @unique
+  intent_id String?
   createdAt DateTime @default(now())
   userEmail String
 

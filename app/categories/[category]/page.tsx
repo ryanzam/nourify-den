@@ -34,7 +34,7 @@ const CategoryPage = async ({ params }: { params: IParams }) => {
 
                     <div className="flex items-center justify-between px-4 py-2 bg-amber-900">
                         <h1 className="text-lg font-bold text-white">${f.price}</h1>
-                        <button className="secondary-btn">Add to cart</button>
+                        <button className="secondary-btn">Order now</button>
                     </div>
                 </Link>
             ))}

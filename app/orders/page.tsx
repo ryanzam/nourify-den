@@ -1,7 +1,7 @@
 "use client"
 
 import { useQuery } from "react-query"
-import { OrderType } from "../types/types"
+import { OrderStatus, OrderType } from "../types/types"
 import { useSession } from "next-auth/react"
 import { useRouter } from "next/navigation"
 
@@ -85,18 +85,22 @@ const OrdersPage = () => {
                                             Update status
                                         </button>
                                     </span> :
-                                    <span>order.status</span>
+                                    <span className={`whitespace-nowrap rounded-full px-2.5 py-0.5 text-sm
+                                     ${order.status === OrderStatus.DELIVERED ? "bg-green-100" : "bg-amber-100"}
+                                     `}>
+                                        {order.status}
+                                    </span>
                                 }
                             </td>
-
-                            <td className="whitespace-nowrap px-4 py-2">
-                                <a
-                                    href="#"
-                                    className="inline-block primary-btn"
-                                >
-                                    View
-                                </a>
-                            </td>
+                            {session?.user.isAdmin &&
+                                <td className="whitespace-nowrap px-4 py-2">
+                                    <a
+                                        href="#"
+                                        className="inline-block primary-btn"
+                                    >
+                                        View
+                                    </a>
+                                </td>}
                         </tr>
                     ))}
                 </tbody>

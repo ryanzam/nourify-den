@@ -4,11 +4,16 @@ import { MdFastfood } from "react-icons/md"
 import { AiOutlineShoppingCart } from "react-icons/ai"
 import { signOut, useSession } from "next-auth/react"
 import { useCartStore } from "@/store/cartstore"
+import { useEffect } from "react"
 
 const Nav = () => {
 
+    useEffect(() => {
+        useCartStore.persist.rehydrate()
+    }, [])
+    
     const { status } = useSession()
-    const { foods, totalPrice } = useCartStore()
+    const { qtyFood } = useCartStore()
 
     return (
         <header className="bg-neutral-100">
@@ -33,21 +38,13 @@ const Nav = () => {
                                         Menu
                                     </a>
                                 </li>
-
-                                <li>
-                                    <a className="text-gray-500 transition hover:text-gray-500/75"
-                                        href="/"
-                                    >
-                                        Contacts
-                                    </a>
-                                </li>
                                 <li>
                                     <a className="text-gray-500 transition hover:text-gray-500/75"
                                         href="/cart"
                                     >
-                                        <span className="flex">
-                                            <AiOutlineShoppingCart size={20} /> ({foods.length})
-                                        </span>
+                                        <div className="flex">
+                                            <AiOutlineShoppingCart size={20} />{qtyFood}
+                                        </div>
                                     </a>
                                 </li>
                             </ul>
@@ -76,7 +73,7 @@ const Nav = () => {
                                     >
                                         Orders
                                     </a>
-                                    <a className="secondary-btn"
+                                    <a className="secondary-btn cursor-pointer"
                                         onClick={() => signOut({ callbackUrl: "/" })}
                                     >
                                         Sign out

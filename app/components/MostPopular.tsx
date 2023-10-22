@@ -5,6 +5,7 @@ import Image from "next/image"
 import { FoodInCartType, FoodType } from "../types/types"
 import { FC } from "react"
 import toast from "react-hot-toast"
+import { useRouter } from "next/navigation"
 
 interface IMostPopularProps {
     popularFoods: FoodType[]
@@ -12,12 +13,10 @@ interface IMostPopularProps {
 
 const MostPopular: FC<IMostPopularProps> = ({ popularFoods }) => {
 
-    const { addFoodToCart } = useCartStore()
+    const router = useRouter()
 
-
-    const handleAddToCart = (food: FoodInCartType) => {
-        addFoodToCart({ id: food.id, title: food.title, image: food.image, quantity: 1, price: food.price })
-        toast.success(`${food.title} added`)
+    const onClickOrder = (food: FoodInCartType) => {
+       router.push("/foods/"+food.id)
     }
 
     return (
@@ -47,8 +46,8 @@ const MostPopular: FC<IMostPopularProps> = ({ popularFoods }) => {
 
                             <p className="font-medium text-gray-500 dark:text-gray-300">{food.description}</p>
 
-                            <button className="w-full primary-btn" onClick={() => handleAddToCart(food)}>
-                                Add to Cart
+                            <button className="w-full primary-btn" onClick={() => onClickOrder(food)}>
+                                Order now
                             </button>
                         </div>
                     ))}

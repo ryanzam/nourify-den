@@ -1,40 +1,49 @@
 "use client"
 
-import { FoodInCartType, FoodType } from "@/app/types/types";
+import { FoodInCartType, FoodType, OptionsType } from "@/app/types/types";
 import { useCartStore } from "@/store/cartstore";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
 const Options = ({ food }: { food: FoodType }) => {
 
-    const [selectedSize, setSelectedSize] = useState(0)
+    const [selectedOpts, setSelectedOpts] = useState({ idx: 0, size: food.options[0].title })
     const [selectedQty, setSelectedQty] = useState(1)
     const [total, setTotal] = useState(food.price)
 
     useEffect(() => {
+        useCartStore.persist.rehydrate()
+    }, [])
+
+    useEffect(() => {
         if (food.options.length > 0) {
-            setTotal((food.price + food.options[selectedSize].extraPrice) * selectedQty)
+            setTotal((food.price + food.options[selectedOpts.idx].extraPrice) * selectedQty)
         }
-    }, [selectedQty, selectedSize, food])
+    }, [selectedQty, selectedOpts, food])
 
     const { addFoodToCart } = useCartStore()
 
     const handleAddToCart = () => {
         const addedFood: FoodInCartType = {
-            id: food.id, title: food.title, image: food.image, quantity: selectedQty, price: total
+            id: food.id, title: food.title, image: food.image, optsTitle: selectedOpts.size,
+            quantity: selectedQty, price: total
         }
         addFoodToCart(addedFood)
-        toast.success(`${addedFood.title} added`)
+        toast.success(`${addedFood.title} added to cart`)
+    }
+
+    const onClickOptions = (i: number, title: string) => {
+        setSelectedOpts(prev => ({idx: i, size: prev.size + "," + title}))
     }
 
     return (
         <div className="">
             <h3 className="mb-4 font-bold text-lg">${total}</h3>
             <div className="flex gap-1">
-                {food.options.map((o: any, idx) => (
+                {food.options.map((o: OptionsType, idx) => (
                     <button key={idx}
-                        className={`${selectedSize === idx ? "primary-btn" : "secondary-btn"} `}
-                        onClick={() => setSelectedSize(idx)}>
+                        className={`${selectedOpts.idx === idx ? "primary-btn" : "secondary-btn"} `}
+                        onClick={() => onClickOptions(idx, o.title)}>
                         {o.title}
                     </button>
                 ))}

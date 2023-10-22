@@ -3,11 +3,13 @@
 import { useCartStore } from "@/store/cartstore"
 import Image from "next/image"
 import { CiCircleRemove } from "react-icons/ci"
-import { FoodInCartType } from "../types/types"
+import { FoodInCartType, OrderStatus } from "../types/types"
 import { MdDeleteForever } from "react-icons/md"
 import toast from "react-hot-toast"
 import { useEffect } from "react"
 import Empty from "../components/Empty"
+import { useRouter } from "next/navigation"
+import { useSession } from "next-auth/react"
 
 const CartPage = () => {
 
@@ -17,22 +19,48 @@ const CartPage = () => {
 
     const { foods, totalPrice, qtyFood, remvoveFoodFromCart, emptyCart } = useCartStore()
 
+    const router = useRouter()
+    const { data: session } = useSession()
+
     const handleRemove = (food: FoodInCartType) => {
         remvoveFoodFromCart(food)
         toast.success(`${food.title} removed`)
     }
 
+    const checkoutHandler = () => {
+        if (!session) {
+            router.push("/signin")
+        } else {
+            fetch(`/api/orders/`, {
+                method: 'POST',
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({ 
+                    foods,
+                    status: OrderStatus.ORDER_RECEIVED,
+                    price: totalPrice,
+                    userEmail: session.user.email
+                 })
+            }).then(response => {
+                return response.json()
+            }).then(data => {
+                router.push(`/payment/${data.id}`)
+            })
+            .catch(err => toast.error("Error: " + err.message))
+        }
+    }
+
     const renderFoods = () => {
         if (foods.length === 0) {
-            return <Empty title="Cart is empty" description="You do not have any food in the cart"/>
+            return <Empty title="Cart is empty" description="You do not have any food in the cart" />
         }
+
         return <>
-            {foods.map((food: any) => (
+            {foods.map((food: FoodInCartType) => (
                 <div className="flex items-center justify-between mb-4" key={food.id}>
-                    <Image src={food.image} alt="" width={100} height={100} />
+                    {food.image &&
+                        <Image src={food.image} alt="" width={100} height={100} />}
                     <div className="">
                         <h1 className="uppercase text-xl font-bold">{food.title} X {food.quantity}</h1>
-                        <span>Large</span>
                     </div>
                     <h2 className="font-bold">${food.price}</h2>
                     <span className="cursor-pointer" onClick={() => handleRemove(food)}>
@@ -68,7 +96,7 @@ const CartPage = () => {
                         <span className="">TOTAL(INCL. VAT)</span>
                         <span className="font-bold">${totalPrice}</span>
                     </div>
-                    <button className="primary-btn w-1/2 self-end">
+                    <button className="primary-btn w-1/2 self-end" onClick={checkoutHandler}>
                         CHECKOUT
                     </button>
                 </div>

@@ -29,7 +29,6 @@ const SignupPage = () => {
             method: 'POST',
             body: JSON.stringify({ name, email, password })
         }).then(response => {
-            console.log(response.json())
             toast.success("Account registered, you can sign in now")
             router.push("/signin")
         }).catch(err => toast.error("Error: " + err.message))
