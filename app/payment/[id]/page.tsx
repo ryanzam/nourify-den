@@ -10,7 +10,7 @@ interface IPaymentPageProps {
     id: string
 }
 
-const stripePromise = loadStripe(`${process.env.STRIPE_PUBLISHABLE_KEY}`);
+const stripePromise = loadStripe(`${process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY}`);
 
 const PaymentPage = ({ params }: { params: IPaymentPageProps }) => {
 
@@ -39,7 +39,7 @@ const PaymentPage = ({ params }: { params: IPaymentPageProps }) => {
 
     return (<div>
         {clientSecret && (
-            <Elements options={options} stripe={stripePromise}>
+            <Elements options={options} stripe={stripePromise} key={clientSecret}>
                 <CheckoutForm />
             </Elements>
         )}

@@ -8,7 +8,7 @@ export async function GET(request: NextRequest) {
     if (!session)
         return NextResponse.error()
 
-    if (session.user.isAdmin) {
+        if (session.user.isAdmin) {
         const orders = await prisma.order.findMany()
         return NextResponse.json(orders)
     }
