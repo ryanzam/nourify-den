@@ -1,5 +1,6 @@
 "use client"
 
+import { useCartStore } from "@/store/cartstore";
 import { useRouter, useSearchParams } from "next/navigation"
 import { useEffect } from "react";
 import toast from "react-hot-toast";
@@ -10,6 +11,8 @@ const SuccessPage = () => {
     const searchParams = useSearchParams()
     const paymentintent = searchParams.get("payment_intent");
 
+    const {emptyCart} = useCartStore()
+
     useEffect(() => {
         function confirmPayment() {
             fetch(`/api/paymentconfirm/${paymentintent}`, {
@@ -18,6 +21,7 @@ const SuccessPage = () => {
                 setTimeout(() => {
                     router.push("/orders");
                 }, 3000);
+                emptyCart()
             }).catch(err => toast.error("Error: " + err.message))
         }
         confirmPayment()

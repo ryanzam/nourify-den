@@ -1,6 +1,6 @@
 "use client"
 
-import { useQuery } from "react-query"
+import { useQuery, useMutation, useQueryClient } from "react-query"
 import { OrderStatus, OrderType } from "../types/types"
 import { useSession } from "next-auth/react"
 import { useRouter } from "next/navigation"
@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation"
 import Loader from "@/app/components/Loader"
 import Empty from "../components/Empty"
 import { useState } from "react"
+import toast from "react-hot-toast"
 
 const OrdersPage = () => {
 
@@ -15,6 +16,19 @@ const OrdersPage = () => {
 
     const { data: session, status } = useSession()
     const router = useRouter()
+    const queryClient = useQueryClient();
+
+    const mutation = useMutation({
+        mutationFn: ({ id, status }: { id: string; status: string }) => {
+            return fetch(`/api/orders/${id}`, {
+                method: "PUT",
+                body: JSON.stringify({status}),
+            });
+        },
+        onSuccess() {
+            queryClient.invalidateQueries({ queryKey: ["myorders"] });
+        },
+    });
 
     if (status === "unauthenticated") {
         router.push("/signin")
@@ -34,8 +48,14 @@ const OrdersPage = () => {
         return <Empty title="No orders" description="You don't have any orders yet." />
     }
 
-    const handleUpdate = () => {
+    const onChange = (val: any) => {
+        setOrderStatus(val)
+    }
 
+    const handleUpdate = (e: any, id: string) => {
+        e.preventDefault();
+        mutation.mutate({ id, status: orderStatus })
+        toast.success("Order updated.")
     }
 
     return (
@@ -58,7 +78,6 @@ const OrdersPage = () => {
                         <th className="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
                             Status
                         </th>
-                        <th className="px-4 py-2"></th>
                     </tr>
                 </thead>
 
@@ -73,15 +92,16 @@ const OrdersPage = () => {
                             <td className="whitespace-nowrap px-4 py-2 text-gray-700">{order.createdAt.toString().slice(0, 10)}</td>
                             <td className="whitespace-nowrap px-4 py-2 text-gray-700">
                                 {session?.user.isAdmin ?
-                                    <span>
-                                        <select className="mt-1.5 w-full rounded-lg border-gray-300 text-gray-700 sm:text-sm"
-                                            value={order.status}
-                                            onChange={(e) => setOrderStatus(e.target.value)}>
-                                            <option value="">Please select</option>
-                                            <option value="">33</option>
+                                    <span className="lg:block">
+                                        <select className="mr-2 mt-1.5 w-50 rounded-lg border-gray-300 text-gray-700 sm:text-sm border-2"
+                                            defaultValue={order.status}
+                                            onChange={(e: any) => onChange(e.target.value)}>
+                                            {Object.values(OrderStatus).map(orderStatus => (
+                                                <option key={orderStatus} value={orderStatus}>{orderStatus}</option>
+                                            ))}
                                         </select>
                                         <button className="primary-btn"
-                                            onClick={handleUpdate}>
+                                            onClick={(e) => handleUpdate(e, order.id)}>
                                             Update status
                                         </button>
                                     </span> :
@@ -92,15 +112,6 @@ const OrdersPage = () => {
                                     </span>
                                 }
                             </td>
-                            {session?.user.isAdmin &&
-                                <td className="whitespace-nowrap px-4 py-2">
-                                    <a
-                                        href="#"
-                                        className="inline-block primary-btn"
-                                    >
-                                        View
-                                    </a>
-                                </td>}
                         </tr>
                     ))}
                 </tbody>
